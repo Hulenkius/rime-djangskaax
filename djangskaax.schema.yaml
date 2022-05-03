@@ -1,0 +1,109 @@
+# Rime schema settings
+# encoding: utf-8
+
+schema:
+  name: 鄭張商周音
+  schema_id: djangskaax
+  version: "0.1"
+  author:
+    - hulenkius
+  description: |
+    ɯ > y
+    ʔ > x
+    ɦ > hh
+    ɢ > gg
+    ' > c
+     ̥ʰ > h
+    · ≯
+  dependencies:
+    - cangjie5
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 西文 ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: simplification
+    states: [ 漢字, 汉字 ]
+  - name: ascii_punct
+    states: [ 。，, ．， ]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - reverse_lookup_translator
+    - script_translator
+  filters:
+    - simplifier
+    - uniquifier
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcba;
+  delimiter: " '"
+  algebra:
+    - abbrev/^([bcdghklmnpqrstz]).+$/$1/
+
+translator:
+  dictionary: djangskaax
+  enable_completion: true
+  preedit_format:
+    - xform/ngh(|[ '])/ŋ̊ʰ/
+    - xform/mh(|[ '])/m̥ʰ/
+    - xform/nh(|[ '])/n̥ʰ/
+    - xform/rh(|[ '])/ɾ̥ʰ/
+    - xform/lh(|[ '])/l̥ʰ/
+    - xform/y(|[ '])/ɯ/
+    - xform/c(|[ '])/'/
+    - xform/ng(|[ '])/ŋ/
+    - xform/g(|[ '])/ɡ/
+    - xform/r(|[ '])/ɾ/
+    - xform/y(|[ '])/ɯ/
+    - xform/x(|[ '])/ʔ/
+    - xform/aa(|[ '])/aː/
+    - xform/ee(|[ '])/eː/
+    - xform/ii(|[ '])/iː/
+    - xform/oo(|[ '])/oː/
+    - xform/uu(|[ '])/uː/
+    - xform/ɯɯ(|[ '])/ɯː/
+    - xform/ɡɡ(|[ '])/ɢ/
+    - xform/hh(|[ '])/ɦ/
+    - xform/([ptkqs])h(|[ '])/$1ʰ/
+    - xform/([ɡkhŋqɢʰ])w(|[ '])/$1ʷ/
+  spelling_hints: 12
+
+reverse_lookup:
+  dictionary: cangjie5
+  prefix: "`"
+  suffix: "'"
+  tips: 〔全倉〕
+
+punctuator:
+  import_preset: symbols
+
+key_binder:
+  import_preset: default
+
+recognizer:
+  import_preset: default
+  patterns:
+    reverse_lookup: "`[a-z]*'?$"
+
+style: 
+  font_face: "Iosevka"
+  font_point: 25
